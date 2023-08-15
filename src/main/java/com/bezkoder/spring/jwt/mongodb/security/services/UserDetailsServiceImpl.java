@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.bezkoder.spring.jwt.mongodb.models.User;
+import com.bezkoder.spring.jwt.mongodb.entity.User;
 import com.bezkoder.spring.jwt.mongodb.repository.UserRepository;
 
 @Service

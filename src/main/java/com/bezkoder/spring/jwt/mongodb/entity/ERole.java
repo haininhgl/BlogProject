@@ -1,4 +1,4 @@
-package com.bezkoder.spring.jwt.mongodb.models;
+package com.bezkoder.spring.jwt.mongodb.entity;
 
 public enum ERole {
   ROLE_USER,

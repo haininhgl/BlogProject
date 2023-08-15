@@ -5,16 +5,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "roles")
 public class Role {
+
   @Id
   private String id;
 
-  private ERole name;
+  private RoleType name;
+
+  private boolean isSystemRole = false;
 
   public Role() {
 
   }
 
-  public Role(ERole name) {
+  public Role(RoleType name) {
     this.name = name;
   }
 
@@ -26,11 +29,19 @@ public class Role {
     this.id = id;
   }
 
-  public ERole getName() {
+  public RoleType getName() {
     return name;
   }
 
-  public void setName(ERole name) {
+  public void setName(RoleType name) {
     this.name = name;
+  }
+
+  public boolean isSystemRole() {
+    return isSystemRole;
+  }
+
+  public void setSystemRole(boolean systemRole) {
+    isSystemRole = systemRole;
   }
 }

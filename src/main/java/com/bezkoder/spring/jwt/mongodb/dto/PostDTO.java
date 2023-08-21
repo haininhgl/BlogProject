@@ -1,6 +1,5 @@
 package com.bezkoder.spring.jwt.mongodb.dto;
 
-import com.bezkoder.spring.jwt.mongodb.entity.User;
 
 import java.util.Date;
 
@@ -11,14 +10,14 @@ public class PostDTO {
 
     private Date createdDate;
 
-    private User user;
+    private UserDTO user;
 
     private Date lastModifiedDate;
 
     public PostDTO() {
     }
 
-    public PostDTO(String title, String body, Date createdDate, User user, Date lastModifiedDate) {
+    public PostDTO(String title, String body, Date createdDate, UserDTO user, Date lastModifiedDate) {
         this.title = title;
         this.body = body;
         this.createdDate = createdDate;
@@ -50,11 +49,11 @@ public class PostDTO {
         this.createdDate = createdDate;
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 

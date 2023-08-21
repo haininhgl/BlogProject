@@ -8,7 +8,8 @@ import com.bezkoder.spring.jwt.mongodb.repository.UserRepository;
 import com.bezkoder.spring.jwt.mongodb.request.LoginRequest;
 import com.bezkoder.spring.jwt.mongodb.request.SignupRequest;
 import com.bezkoder.spring.jwt.mongodb.response.JwtResponse;
-import com.bezkoder.spring.jwt.mongodb.security.jwt.JwtUtils;
+import com.bezkoder.spring.jwt.mongodb.security.jwt.JwtService;
+//import com.bezkoder.spring.jwt.mongodb.security.jwt.JwtUtils;
 import com.bezkoder.spring.jwt.mongodb.security.services.UserDetailsImpl;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -32,15 +33,17 @@ public class AuthService {
 
     private final PasswordEncoder encoder;
 
-    private final JwtUtils jwtUtils;
+//    private final JwtUtils jwtUtils;
+
+    private final JwtService jwtService;
 
     public AuthService(AuthenticationManager authenticationManager,
-                       UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtUtils jwtUtils) {
+                       UserRepository userRepository, RoleRepository roleRepository, PasswordEncoder encoder, JwtService jwtService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.encoder = encoder;
-        this.jwtUtils = jwtUtils;
+        this.jwtService = jwtService;
     }
 
     public JwtResponse authenticateUser(LoginRequest loginRequest) {
@@ -52,7 +55,8 @@ public class AuthService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-        String jwt = jwtUtils.generateJwtToken(authentication);
+//        String jwt = jwtUtils.generateJwtToken(authentication);
+        String jwt = jwtService.generateToken(userDetails);
 
         return new JwtResponse(jwt,
                 userDetails.getId(),

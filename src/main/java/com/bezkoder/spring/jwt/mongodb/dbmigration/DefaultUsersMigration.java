@@ -1,4 +1,4 @@
-package com.bezkoder.spring.jwt.mongodb.config.dbmigration;
+package com.bezkoder.spring.jwt.mongodb.dbmigration;
 
 import com.bezkoder.spring.jwt.mongodb.constants.Constants;
 import com.bezkoder.spring.jwt.mongodb.entity.Role;
@@ -26,19 +26,41 @@ public class DefaultUsersMigration {
 
     @Execution
     public void changeSet() {
-        // create system role
-        Role systemRole = new Role();
-        systemRole.setSystemRole(true);
-        systemRole.setName(RoleType.valueOf("ROLE_ADMIN"));
-        systemRole = mongoTemplate.save(systemRole);
+//        // create system role
+//        Role systemRole = new Role();
+//        systemRole.setSystemRole(true);
+//        systemRole.setName(RoleType.valueOf("ROLE_ADMIN"));
+//        systemRole = mongoTemplate.save(systemRole);
+//
+//
+//        // create system user
+//        User systemUser = new User();
+//        systemUser.setUsername(Constants.ADMIN);
+//        systemUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
+//        systemUser.setFullName("Administrator");
+//        systemUser.setEmail("admin@miraway.vn");
+//        systemUser.setRoles(Set.of(systemRole));
+//
+//        mongoTemplate.save(systemUser);
 
-        // create system user
+        // Create system roles
+        Role adminRole = new Role();
+        adminRole.setSystemRole(true);
+        adminRole.setName(RoleType.ROLE_ADMIN);
+        adminRole = mongoTemplate.save(adminRole);
+
+        Role userRole = new Role();
+        userRole.setSystemRole(true);
+        userRole.setName(RoleType.ROLE_USER);
+        userRole = mongoTemplate.save(userRole);
+
+        // Create system user with both roles
         User systemUser = new User();
         systemUser.setUsername(Constants.ADMIN);
         systemUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
         systemUser.setFullName("Administrator");
         systemUser.setEmail("admin@miraway.vn");
-        systemUser.setRoles(Set.of(systemRole));
+        systemUser.setRoles(Set.of(adminRole, userRole));
 
         mongoTemplate.save(systemUser);
 

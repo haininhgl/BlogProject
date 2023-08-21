@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 //import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +21,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.bezkoder.spring.jwt.mongodb.security.jwt.AuthEntryPointJwt;
 import com.bezkoder.spring.jwt.mongodb.security.jwt.AuthTokenFilter;
 import com.bezkoder.spring.jwt.mongodb.security.services.UserDetailsServiceImpl;
+
+import static com.bezkoder.spring.jwt.mongodb.entity.RoleType.ROLE_USER;
 
 @Configuration
 //@EnableWebSecurity
@@ -39,10 +42,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
     return new AuthTokenFilter();
   }
 
-//@Override
-//public void configure(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-//  authenticationManagerBuilder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
-//}
 
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
@@ -84,14 +83,13 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    http.csrf(csrf -> csrf.disable())
-        .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/api/auth/signup").permitAll()
-                .requestMatchers("/api/auth/**").permitAll()
-                .requestMatchers("/api/test/**")
-            .permitAll().anyRequest().authenticated());
+    http.cors(Customizer.withDefaults())
+            .csrf((csrf) -> csrf.disable())
+            .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
+            .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(auth -> auth
+                    .requestMatchers("/api/auth/**").permitAll()
+                    .anyRequest().hasAuthority("ROLE_USER"));
 
     http.authenticationProvider(authenticationProvider());
 

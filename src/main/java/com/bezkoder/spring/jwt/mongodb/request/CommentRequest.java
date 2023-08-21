@@ -1,16 +1,20 @@
 package com.bezkoder.spring.jwt.mongodb.request;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 
 public class CommentRequest {
 
     @NotBlank(message = "Bình luận gì đi?")
-    @Size(max = 200)
     private String body;
 
-    public CommentRequest(String body) {
+    private String postId;
+
+    public CommentRequest(){
+    }
+
+    public CommentRequest(String body, String postId) {
         this.body = body;
+        this.postId = postId;
     }
 
     public String getBody() {
@@ -19,5 +23,13 @@ public class CommentRequest {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getPostId() {
+        return postId;
+    }
+
+    public void setPostId(String postId) {
+        this.postId = postId;
     }
 }

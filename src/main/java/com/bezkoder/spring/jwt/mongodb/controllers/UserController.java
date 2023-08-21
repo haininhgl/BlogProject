@@ -38,7 +38,6 @@ public class UserController {
 
     private final UserMapper userMapper;
 
-
     private final RoleService roleService;
 
     public UserController(UserService userService, UserMapper userMapper, RoleService roleService) {

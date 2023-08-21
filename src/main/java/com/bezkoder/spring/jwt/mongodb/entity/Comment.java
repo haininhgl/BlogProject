@@ -30,54 +30,16 @@ public class Comment {
     @Field("lastModifiedDate")
     private Date lastModifiedDate;
 
-    public Comment(Date lastModifiedDate) {
-        this.lastModifiedDate = lastModifiedDate;
-    }
-
-    public Date getLastModifiedDate() {
-        return lastModifiedDate;
-    }
-
-    public void setLastModifiedDate(Date lastModifiedDate) {
+    public Comment(String id, String body, Date createdDate, User user, Post post, Date lastModifiedDate) {
+        this.id = id;
+        this.body = body;
+        this.createdDate = createdDate;
+        this.user = user;
+        this.post = post;
         this.lastModifiedDate = lastModifiedDate;
     }
 
     public Comment() {
-    }
-
-    public Comment(User user, Post post) {
-        this.user = user;
-        this.post = post;
-    }
-
-    public Comment(String id, String body, Date createdDate, User user, Post post) {
-        this.id = id;
-        this.body = body;
-        this.createdDate = createdDate;
-        this.user = user;
-        this.post = post;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Post getPost() {
-        return post;
-    }
-
-    public void setPost(Post post) {
-        this.post = post;
-    }
-
-    public Comment(String id, String body, Date createdDate) {
-        this.id = id;
-        this.body = body;
-        this.createdDate = createdDate;
     }
 
     public String getId() {
@@ -96,12 +58,36 @@ public class Comment {
         this.body = body;
     }
 
-    public Date getCreationDate() {
+    public Date getCreatedDate() {
         return createdDate;
     }
 
-    public void setCreationDate(Date createdDate) {
+    public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Post getPost() {
+        return post;
+    }
+
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
+    public Date getLastModifiedDate() {
+        return lastModifiedDate;
+    }
+
+    public void setLastModifiedDate(Date lastModifiedDate) {
+        this.lastModifiedDate = lastModifiedDate;
     }
 
     @Override

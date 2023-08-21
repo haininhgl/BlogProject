@@ -1,10 +1,12 @@
 package com.bezkoder.spring.jwt.mongodb.service;
 
+import com.bezkoder.spring.jwt.mongodb.entity.Post;
 import com.bezkoder.spring.jwt.mongodb.exception.ForbiddenException;
 import com.bezkoder.spring.jwt.mongodb.exception.ResourceNotFoundException;
 import com.bezkoder.spring.jwt.mongodb.entity.Comment;
 import com.bezkoder.spring.jwt.mongodb.entity.Role;
 import com.bezkoder.spring.jwt.mongodb.entity.User;
+import com.bezkoder.spring.jwt.mongodb.repository.PostRepository;
 import com.bezkoder.spring.jwt.mongodb.request.CommentRequest;
 import com.bezkoder.spring.jwt.mongodb.repository.CommentRepository;
 import org.springframework.beans.BeanUtils;
@@ -23,10 +25,13 @@ public class CommentServiceImpl implements CommentService {
 
     private final RoleService roleService;
 
-    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, RoleService roleService) {
+    private final PostRepository postRepository;
+
+    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, RoleService roleService, PostRepository postRepository) {
         this.commentRepository = commentRepository;
         this.userService = userService;
         this.roleService = roleService;
+        this.postRepository = postRepository;
     }
     @Override
     public Page<Comment> getAllComment(Pageable pageable) {
@@ -37,6 +42,14 @@ public class CommentServiceImpl implements CommentService {
     public Comment createComment(CommentRequest request) {
         Comment comment = new Comment();
         BeanUtils.copyProperties(request, comment);
+
+        User user = userService.getCurrentLoginUser();
+        comment.setUser(user);
+
+        Post post = postRepository.findById(request.getPostId())
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        comment.setPost(post);
+
         return commentRepository.save(comment);
     }
 

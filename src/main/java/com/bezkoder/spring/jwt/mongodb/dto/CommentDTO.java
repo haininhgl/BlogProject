@@ -11,30 +11,30 @@ public class CommentDTO {
 
     private Date createdDate;
 
-    private User user;
+    private UserDTO user;
 
-    private Post post;
+    private PostDTO post;
 
-    public CommentDTO(String body, Date createdDate, User user, Post post) {
+    public CommentDTO(String body, Date createdDate, UserDTO user, PostDTO post) {
         this.body = body;
         this.createdDate = createdDate;
         this.user = user;
         this.post = post;
     }
 
-    public User getUser() {
+    public UserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserDTO user) {
         this.user = user;
     }
 
-    public Post getPost() {
+    public PostDTO getPost() {
         return post;
     }
 
-    public void setPost(Post post) {
+    public void setPost(PostDTO post) {
         this.post = post;
     }
 

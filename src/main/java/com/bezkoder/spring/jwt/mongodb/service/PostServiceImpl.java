@@ -39,6 +39,10 @@ public class PostServiceImpl implements  PostService {
     public Post createPost(PostRequest request) {
         Post post = new Post();
         BeanUtils.copyProperties(request, post);
+
+        User user = userService.getCurrentLoginUser();
+
+        post.setUser(user);
         return postRepository.save(post);
     }
 

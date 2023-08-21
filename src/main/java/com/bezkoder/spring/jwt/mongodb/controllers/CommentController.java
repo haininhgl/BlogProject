@@ -47,11 +47,11 @@ public class CommentController {
 
     //viet comment
     @PostMapping("/comments")
-    @PreAuthorize("hasRole('USER')")
-    public APIResponse<Comment> createComment(@RequestBody @Valid CommentRequest request) {
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public APIResponse<CommentDTO> createComment(@RequestBody @Valid CommentRequest request) {
         Comment newComment = commentService.createComment(request);
-
-        return APIResponse.newSuccessResponse(newComment);
+        CommentDTO commentDTO = commentMapper.toDto(newComment);
+        return APIResponse.newSuccessResponse(commentDTO);
     }
 
     //cap nhat comment

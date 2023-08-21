@@ -52,7 +52,7 @@ public class UserServiceImpl implements UserService {
 
 
     public User getUserByLogin(String login) throws ResourceNotFoundException {
-        User user = userRepository.findById(login).orElse(null);
+        User user = userRepository.findByUsername(login).orElse(null);
         if (user == null) {
             throw new ResourceNotFoundException("Không tìm thấy người dùng.");
         }

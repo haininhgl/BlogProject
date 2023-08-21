@@ -1,7 +1,10 @@
 package com.bezkoder.spring.jwt.mongodb.dto;
 
+import java.util.Set;
+
 public class UserDTO {
 
+    private String id;
     private String username;
 
     private String password;
@@ -10,7 +13,7 @@ public class UserDTO {
 
     private String email;
 
-//    private Set<RoleDTO> roles;
+    private Set<RoleDTO> roles;
 
     public UserDTO() {
     }
@@ -19,6 +22,15 @@ public class UserDTO {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public UserDTO(String id, String username, String password, String fullName, String email, Set<RoleDTO> roles) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.fullName = fullName;
+        this.email = email;
+        this.roles = roles;
     }
 
     public String getUsername() {
@@ -53,21 +65,31 @@ public class UserDTO {
         this.email = email;
     }
 
-//    public Set<RoleDTO> getRoles() {
-//        return roles;
-//    }
-//
-//    public void setRoles(Set<RoleDTO> roles) {
-//        this.roles = roles;
-//    }
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Set<RoleDTO> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<RoleDTO> roles) {
+        this.roles = roles;
+    }
 
     @Override
     public String toString() {
         return "UserDTO{" +
+                "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
+                ", roles=" + roles +
                 '}';
     }
 }

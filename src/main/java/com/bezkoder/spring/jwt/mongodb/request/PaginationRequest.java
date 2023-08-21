@@ -17,7 +17,8 @@ public class PaginationRequest {
 
     private String sortDirection = "";
 
-    public PaginationRequest() {}
+    public PaginationRequest() {
+    }
 
     public PaginationRequest(int current, int pageSize, String sortBy, String sortDirection) {
         this.current = current;
@@ -72,7 +73,7 @@ public class PaginationRequest {
             this.pageSize = maxPageSize;
         }
 
-        if (sortBy != null) {
+        if (sortBy != null && sortDirection != null) {
             Sort sort = Sort.by(sortBy);
             if (sortDirection.equalsIgnoreCase(DESCENDING_SORT_DIRECTION)) {
                 sort = sort.descending();

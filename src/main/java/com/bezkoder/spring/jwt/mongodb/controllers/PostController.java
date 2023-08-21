@@ -62,10 +62,10 @@ public class PostController {
     //Tạo post
     @PostMapping("/posts")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public APIResponse<Post> createPost(@RequestBody PostRequest request) {
+    public APIResponse<PostDTO> createPost(@RequestBody PostRequest request) {
         Post post = postService.createPost(request);
-
-        return APIResponse.newSuccessResponse(post);
+        PostDTO postDTO = postMapper.toDto(post);
+        return APIResponse.newSuccessResponse(postDTO);
     }
 
     //Cập nhật post theo id

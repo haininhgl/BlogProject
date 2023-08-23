@@ -1,17 +1,13 @@
 package com.bezkoder.spring.jwt.mongodb.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-//import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-//import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-//import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +18,6 @@ import com.bezkoder.spring.jwt.mongodb.security.jwt.AuthEntryPointJwt;
 import com.bezkoder.spring.jwt.mongodb.security.jwt.AuthTokenFilter;
 import com.bezkoder.spring.jwt.mongodb.security.services.UserDetailsServiceImpl;
 
-import static com.bezkoder.spring.jwt.mongodb.entity.RoleType.ROLE_USER;
 
 @Configuration
 //@EnableWebSecurity
@@ -31,11 +26,15 @@ import static com.bezkoder.spring.jwt.mongodb.entity.RoleType.ROLE_USER;
 //jsr250Enabled = true,
 //prePostEnabled = true) // by default
 public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
-  @Autowired
-  UserDetailsServiceImpl userDetailsService;
 
-  @Autowired
-  private AuthEntryPointJwt unauthorizedHandler;
+  private final UserDetailsServiceImpl userDetailsService;
+
+  private final AuthEntryPointJwt unauthorizedHandler;
+
+  public WebSecurityConfig(UserDetailsServiceImpl userDetailsService, AuthEntryPointJwt unauthorizedHandler) {
+    this.userDetailsService = userDetailsService;
+    this.unauthorizedHandler = unauthorizedHandler;
+  }
 
   @Bean
   public AuthTokenFilter authenticationJwtTokenFilter() {
@@ -52,12 +51,6 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
 
     return authProvider;
   }
-
-//@Bean
-//@Override
-//public AuthenticationManager authenticationManagerBean() throws Exception {
-//  return super.authenticationManagerBean();
-//}
 
   @Bean
   public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
@@ -89,7 +82,7 @@ public class WebSecurityConfig { // extends WebSecurityConfigurerAdapter {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers("/api/auth/**").permitAll()
-                    .anyRequest().hasAuthority("ROLE_USER"));
+                    .anyRequest().hasAnyAuthority("ROLE_USER","ROLE_ADMIN"));
 
     http.authenticationProvider(authenticationProvider());
 

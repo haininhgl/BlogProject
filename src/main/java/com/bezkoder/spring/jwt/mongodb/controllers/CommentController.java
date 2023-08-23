@@ -35,6 +35,7 @@ public class CommentController {
     }
 
     @GetMapping("/comments")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public APIResponse<List<CommentDTO>> getCommentList(PaginationRequest paginationRequest)
             throws ResourceNotFoundException {
 
@@ -47,7 +48,7 @@ public class CommentController {
 
     //viet comment
     @PostMapping("/comments")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public APIResponse<CommentDTO> createComment(@RequestBody @Valid CommentRequest request) {
         Comment newComment = commentService.createComment(request);
         CommentDTO commentDTO = commentMapper.toDto(newComment);

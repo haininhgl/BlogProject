@@ -75,7 +75,7 @@ public class UserController {
 
     //cap nhat user
     @PutMapping("/users/{id}")
-//    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public APIResponse<UserDTO> updateUser(@PathVariable String id, @Valid @RequestBody BasicUserRequest request)
             throws ResourceNotFoundException, ForbiddenException {
         User user = userService.getUserById(id);

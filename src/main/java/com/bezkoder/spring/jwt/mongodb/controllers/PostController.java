@@ -40,6 +40,7 @@ public class PostController {
 
     //Xem tất cả post
     @GetMapping("/posts")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public APIResponse<List<PostDTO>> getPostList(@Valid PostFilter filter, PaginationRequest paginationRequest)
             throws ResourceNotFoundException {
 
@@ -52,6 +53,7 @@ public class PostController {
 
     //Xem post theo tên
     @GetMapping("/posts/search/{title}")
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public APIResponse<List<PostDTO>> getPostByTitle(@PathVariable String title) throws ResourceNotFoundException {
         List<PostDTO> posts;
 
@@ -61,7 +63,7 @@ public class PostController {
 
     //Tạo post
     @PostMapping("/posts")
-    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    @PreAuthorize("hasRole('USER')")
     public APIResponse<PostDTO> createPost(@RequestBody PostRequest request) {
         Post post = postService.createPost(request);
         PostDTO postDTO = postMapper.toDto(post);

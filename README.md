@@ -1,79 +1,62 @@
-# Spring Boot, Spring Security, MongoDB - JWT Authentication & Authorization example
 
-- Appropriate Flow for User Signup & User Login with JWT Authentication
-- Spring Boot Application Architecture with Spring Security
-- How to configure Spring Security to work with JWT
-- How to define Data Models and association for Authentication and Authorization
-- Way to use Spring Data MongoDB to interact with MongoDB Database
-
-## User Registration, Login and Authorization process.
-
-![spring-boot-mongodb-jwt-authentication-flow](spring-boot-mongodb-jwt-authentication-flow.png)
-
-## Spring Boot Rest API Architecture with Spring Security
-You can have an overview of our Spring Boot Server with the diagram below:
-
-![spring-boot-mongodb-jwt-authentication-spring-security-architecture](spring-boot-mongodb-jwt-authentication-spring-security-architecture.png)
-
-For more detail, please visit:
-> [Spring Boot, MongoDB: JWT Authentication with Spring Security](https://bezkoder.com/spring-boot-jwt-auth-mongodb/)
-
-> [Using HttpOnly Cookie](https://www.bezkoder.com/spring-boot-mongodb-login-example/)
-
-Working with Front-end:
-> [Vue](https://www.bezkoder.com/jwt-vue-vuex-authentication/)
-
-> [Angular 8](https://www.bezkoder.com/angular-jwt-authentication/) / [Angular 10](https://www.bezkoder.com/angular-10-jwt-auth/) / [Angular 11](https://www.bezkoder.com/angular-11-jwt-auth/) / [Angular 12](https://www.bezkoder.com/angular-12-jwt-auth/) / [Angular 13](https://www.bezkoder.com/angular-13-jwt-auth/)
-
-> [React](https://www.bezkoder.com/react-jwt-auth/) / [React Redux](https://www.bezkoder.com/react-redux-jwt-auth/)
-
-More Practice:
-> [Spring Boot with MongoDB CRUD example using Spring Data](https://www.bezkoder.com/spring-boot-mongodb-crud/)
-
-> [Spring Boot MongoDB Pagination & Filter example](https://www.bezkoder.com/spring-boot-mongodb-pagination/)
-
-> [Spring Boot + GraphQL + MongoDB example](https://www.bezkoder.com/spring-boot-graphql-mongodb-example-graphql-java/)
-
-> [Spring Boot Repository Unit Test with @DataJpaTest](https://bezkoder.com/spring-boot-unit-test-jpa-repo-datajpatest/)
-
-> [Spring Boot Rest Controller Unit Test with @WebMvcTest](https://www.bezkoder.com/spring-boot-webmvctest/)
-
-> Validation: [Spring Boot Validate Request Body](https://www.bezkoder.com/spring-boot-validate-request-body/)
-
-> Documentation: [Spring Boot and Swagger 3 example](https://www.bezkoder.com/spring-boot-swagger-3/)
-
-> Caching: [Spring Boot Redis Cache example](https://www.bezkoder.com/spring-boot-redis-cache-example/)
-
-Fullstack:
-> [Vue.js + Spring Boot + MongoDB example](https://www.bezkoder.com/spring-boot-vue-mongodb/)
-
-> [Angular 8 + Spring Boot + MongoDB example](https://www.bezkoder.com/angular-spring-boot-mongodb/)
-
-> [Angular 10 + Spring Boot + MongoDB example](https://www.bezkoder.com/angular-10-spring-boot-mongodb/)
-
-> [Angular 11 + Spring Boot + MongoDB example](https://www.bezkoder.com/angular-11-spring-boot-mongodb/)
-
-> [Angular 12 + Spring Boot + MongoDB example](https://www.bezkoder.com/angular-12-spring-boot-mongodb/)
-
-> [Angular 13 + Spring Boot + MongoDB example](https://www.bezkoder.com/angular-13-spring-boot-mongodb/)
-
-> [Angular 14 + Spring Boot + MongoDB example](https://www.bezkoder.com/spring-boot-angular-14-mongodb/)
-
-> [Angular 15 + Spring Boot + MongoDB example](https://www.bezkoder.com/spring-boot-angular-15-mongodb/)
-
-> [Angular 16 + Spring Boot + MongoDB example](https://www.bezkoder.com/spring-boot-angular-16-mongodb/)
-
-> [React + Spring Boot + MongoDB example](https://www.bezkoder.com/react-spring-boot-mongodb/)
+# Simple Blog API Design
+This is a guide to the API design for a simple blog system. 
+The system consists of two types of users: User and Admin.
 
 
-Run both Back-end & Front-end in one place:
-> [Integrate Angular with Spring Boot Rest API](https://www.bezkoder.com/integrate-angular-spring-boot/)
 
-> [Integrate React with Spring Boot Rest API](https://www.bezkoder.com/integrate-reactjs-spring-boot/)
 
-> [Integrate Vue with Spring Boot Rest API](https://www.bezkoder.com/integrate-vue-spring-boot/)
+## User Permissions
+### User
 
-## Run Spring Boot application
-```
-mvn spring-boot:run
-```
++ Has limited permissions.
+
++ Can perform actions such as viewing blog posts and commenting.
+
++ Can edit their own comments.
+
+### Admin
+
++ Has elevated permissions but not unlimited power.
+
++ Cannot edit comments made by other users, as this could be seen as impersonation.
+
++ Can only delete comments if they violate guidelines or are inappropriate.
+## Installation and Set up
+
+Clone the repository to your local machine.
+    
+## API Endpoints
+Below are the main API endpoints for the blog system:
+
++ GET /api/posts: Get all blog posts.
+
++ GET /api/posts/:postId: Get a specific blog post by ID.
+
++ POST /api/posts: Create a new blog post (User only).
+
++ PUT /api/posts/:postId: Update a blog post by ID (User only).
+
++ DELETE /api/posts/:postId: Delete a blog post by ID.
+
++ POST /api/comments/:postId: Add a comment to a blog post (User only).
+
++ PUT /api/comments/:commentId: Edit a comment (User only).
+
++ DELETE /api/comments/:commentId: Delete a comment.
+
++ POST /api/login: Log in as a user or admin.
+## Authentication and Authorization
+The API uses token-based authentication. Users and admins must include a valid token in the request headers to access protected endpoints.
+
++ To log in, send a POST request to /api/login with the user's credentials. The server will respond with a token.
+
++ For user actions (like adding comments), the token must belong to a logged-in user.
+
++ For admin actions (like creating or editing blog posts), the token must belong to an admin.
+## Conclusion
+This README provides a brief overview of the simple blog API system, including user types, permissions, and endpoints. 
+
+For more details and implementation, please refer to the codebase and API documentation.
+
+ Feel free to extend and customize the API as per your specific requirements. Happy coding!

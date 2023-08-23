@@ -19,11 +19,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class JwtService {
 
-    @Value("404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970")
+    @Value("${secretKey}")
     private String secretKey;
-    @Value("86400000")
+    @Value("${jwtExpiration}")
     private long jwtExpiration;
-    @Value("604800000")
+    @Value("${refreshExpiration}")
     private long refreshExpiration;
 
     public String extractUsername(String token) {

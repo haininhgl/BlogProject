@@ -13,7 +13,7 @@ public interface UserRepository extends MongoRepository<User, String>,Customized
 
   Page<User> findAll(Pageable pageable);
 
-  Boolean existsByUsername(String username);
+  boolean existsByUsername(String username);
 
-  Boolean existsByEmail(String email);
+  boolean existsByEmail(String email);
 }

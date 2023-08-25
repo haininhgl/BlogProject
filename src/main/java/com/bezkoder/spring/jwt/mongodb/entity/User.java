@@ -36,10 +36,6 @@ public class User {
 
   @NotBlank
   @Size(max = STRING_MAX_LENGTH)
-  private String fullName;
-
-  @NotBlank
-  @Size(max = STRING_MAX_LENGTH)
   @Email
   @Indexed(unique = true)
   private String email;
@@ -85,14 +81,6 @@ public class User {
     this.password = password;
   }
 
-  public String getFullName() {
-    return fullName;
-  }
-
-  public void setFullName(String fullName) {
-    this.fullName = fullName;
-  }
-
   public String getEmail() {
     return email;
   }
@@ -128,16 +116,5 @@ public class User {
       return false;
     }
     return id != null && id.equals(((User) o).id);
-  }
-
-  public String getRoleId() {
-    return getRoleId();
-  }
-
-  public void setRoleId(String roleId) {
-  }
-
-  public Object getUser() {
-    return getUser();
   }
 }

@@ -3,6 +3,7 @@ package com.bezkoder.spring.jwt.mongodb.service;
 import com.bezkoder.spring.jwt.mongodb.entity.Role;
 import com.bezkoder.spring.jwt.mongodb.entity.RoleType;
 import com.bezkoder.spring.jwt.mongodb.entity.User;
+import com.bezkoder.spring.jwt.mongodb.exception.BadRequestException;
 import com.bezkoder.spring.jwt.mongodb.repository.RoleRepository;
 import com.bezkoder.spring.jwt.mongodb.repository.UserRepository;
 import com.bezkoder.spring.jwt.mongodb.request.LoginRequest;
@@ -17,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.HashSet;
 import java.util.List;
@@ -55,7 +57,6 @@ public class AuthService {
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
-//        String jwt = jwtUtils.generateJwtToken(authentication);
         String jwt = jwtService.generateToken(userDetails);
 
         return new JwtResponse(jwt,
@@ -65,13 +66,13 @@ public class AuthService {
                 roles);
     }
 
-    public void registerUser(SignupRequest signUpRequest) {
+    public void registerUser(SignupRequest signUpRequest) throws BadRequestException {
         if (userRepository.existsByUsername(signUpRequest.getUsername())) {
-            throw new RuntimeException("Error: Username is already taken!");
+            throw new BadRequestException("Error: Username is already taken!");
         }
 
         if (userRepository.existsByEmail(signUpRequest.getEmail())) {
-            throw new RuntimeException("Error: Email is already in use!");
+            throw new BadRequestException("Error: Email is already in use!");
         }
 
         User user = new User(signUpRequest.getUsername(),
@@ -81,30 +82,27 @@ public class AuthService {
         Set<String> strRoles = signUpRequest.getRoles();
         Set<Role> roles = new HashSet<>();
 
-        if (strRoles == null) {
+        if (CollectionUtils.isEmpty(strRoles)) {
             Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                    .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
+                    .orElseThrow(() -> new BadRequestException("Error: Role is not found."));
             roles.add(userRole);
         } else {
-            strRoles.forEach(role -> {
-                switch (role) {
-                    case "admin" -> {
-                        Role adminRole = roleRepository.findByName(RoleType.ROLE_ADMIN)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(adminRole);
-                    }
-                    case "mod" -> {
-                        Role modRole = roleRepository.findByName(RoleType.ROLE_MODERATOR)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(modRole);
-                    }
-                    default -> {
-                        Role userRole = roleRepository.findByName(RoleType.ROLE_USER)
-                                .orElseThrow(() -> new RuntimeException("Error: Role is not found."));
-                        roles.add(userRole);
-                    }
+            Set<RoleType> roleTypeSet = new HashSet<>();
+            strRoles.forEach(s -> {
+                try {
+                    roleTypeSet.add(RoleType.valueOf(s));
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
+
+            if (roleTypeSet.size() != strRoles.size()) {
+                throw new BadRequestException("Error: Role is not valid.");
+            }
+
+            Set<Role> foundRoleList = roleRepository.findByNameIn(roleTypeSet);
+
+            roles.addAll(foundRoleList);
         }
 
         user.setRoles(roles);

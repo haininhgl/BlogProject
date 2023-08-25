@@ -10,5 +10,6 @@ import com.bezkoder.spring.jwt.mongodb.entity.Role;
 
 public interface RoleRepository extends MongoRepository<Role, String> {
   Optional<Role> findByName(RoleType name);
+  Set<Role> findByNameIn(Set<RoleType> names);
   Set<Role> findByIdIn(Set<String> ids);
 }

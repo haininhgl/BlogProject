@@ -13,7 +13,7 @@ public class UserRequest {
 
     @Size(max = STRING_MAX_LENGTH)
     @NotBlank
-    private String fullName;
+    private String username;
 
     private String password;
 
@@ -24,19 +24,19 @@ public class UserRequest {
     public UserRequest() {
     }
 
-    public UserRequest(String fullName, String password, String email, Set<String> roleIds) {
-        this.fullName = fullName;
+    public UserRequest(String username, String password, String email, Set<String> roleIds) {
+        this.username = username;
         this.password = password;
         this.email = email;
         this.roleIds = roleIds;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {

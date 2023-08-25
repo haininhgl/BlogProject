@@ -9,8 +9,6 @@ public class UserDTO {
 
     private String password;
 
-    private String fullName;
-
     private String email;
 
     private Set<RoleDTO> roles;
@@ -24,11 +22,10 @@ public class UserDTO {
         this.email = email;
     }
 
-    public UserDTO(String id, String username, String password, String fullName, String email, Set<RoleDTO> roles) {
+    public UserDTO(String id, String username, String password, String email, Set<RoleDTO> roles) {
         this.id = id;
         this.username = username;
         this.password = password;
-        this.fullName = fullName;
         this.email = email;
         this.roles = roles;
     }
@@ -47,14 +44,6 @@ public class UserDTO {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getFullName() {
-        return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -87,7 +76,6 @@ public class UserDTO {
                 "id='" + id + '\'' +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
-                ", fullName='" + fullName + '\'' +
                 ", email='" + email + '\'' +
                 ", roles=" + roles +
                 '}';

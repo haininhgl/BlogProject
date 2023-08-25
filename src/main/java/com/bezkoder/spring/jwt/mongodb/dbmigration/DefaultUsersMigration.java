@@ -26,23 +26,6 @@ public class DefaultUsersMigration {
 
     @Execution
     public void changeSet() {
-//        // create system role
-//        Role systemRole = new Role();
-//        systemRole.setSystemRole(true);
-//        systemRole.setName(RoleType.valueOf("ROLE_ADMIN"));
-//        systemRole = mongoTemplate.save(systemRole);
-//
-//
-//        // create system user
-//        User systemUser = new User();
-//        systemUser.setUsername(Constants.ADMIN);
-//        systemUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
-//        systemUser.setFullName("Administrator");
-//        systemUser.setEmail("admin@miraway.vn");
-//        systemUser.setRoles(Set.of(systemRole));
-//
-//        mongoTemplate.save(systemUser);
-
         // Create system roles
         Role adminRole = new Role();
         adminRole.setSystemRole(true);
@@ -58,7 +41,6 @@ public class DefaultUsersMigration {
         User systemUser = new User();
         systemUser.setUsername(Constants.ADMIN);
         systemUser.setPassword("$2a$10$gSAhZrxMllrbgj/kkK9UceBPpChGWJA7SYIb1Mqo.n5aNLq1/oRrC");
-        systemUser.setFullName("Administrator");
         systemUser.setEmail("admin@miraway.vn");
         systemUser.setRoles(Set.of(adminRole, userRole));
 

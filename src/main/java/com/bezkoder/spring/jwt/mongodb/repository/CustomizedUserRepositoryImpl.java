@@ -60,7 +60,7 @@ public class CustomizedUserRepositoryImpl implements CustomizedUserRepository {
             criteriaList.add(
                     new Criteria()
                             .orOperator(
-                                    Criteria.where(FULL_NAME).regex(text, "i"),
+                                    Criteria.where(USER_NAME).regex(text, "i"),
                                     Criteria.where(LOGIN).regex(text, "i"),
                                     Criteria.where(EMAIL).regex(text, "i")
                             )

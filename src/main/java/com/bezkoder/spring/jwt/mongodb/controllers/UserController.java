@@ -109,7 +109,6 @@ public class UserController {
 
         user.setRoles(roleList);
 
-        user.setFullName(request.getFullName());
         user.setEmail(request.getEmail());
         return user;
     }

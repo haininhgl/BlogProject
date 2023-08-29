@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
         Set<String> newRoleIds = user.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
         Set<String> currentRoleIds = currentUser.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
 
-        if (!user.getUser().equals(userLogin) || !newRoleIds.equals(currentRoleIds)) {
+        if (!user.equals(userLogin) || !newRoleIds.equals(currentRoleIds)) {
             throw new ForbiddenException("Thao tác không hợp lệ");
         }
 

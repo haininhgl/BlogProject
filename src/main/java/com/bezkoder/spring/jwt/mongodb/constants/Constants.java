@@ -12,8 +12,8 @@ public final class Constants {
     public static final String FIELD_PREFIX = "$";
     public static final String REF_ID = "." + FIELD_PREFIX + ID;
     public static final String ROLE = "roles";
-    public static final String FULL_NAME = "fullName";
     public static final String LOGIN = "login";
+    public static final String USER_NAME = "username";
     public static final String EMAIL = "email";
     public static final String ADMIN = "admin";
 

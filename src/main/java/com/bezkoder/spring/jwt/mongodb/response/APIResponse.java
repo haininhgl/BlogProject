@@ -50,6 +50,22 @@ public class APIResponse<T> {
         return new APIResponse<>(HttpStatus.BAD_REQUEST.value(), message, null);
     }
 
+    public static <T> APIResponse<T> newFailureResponse() {
+        return new APIResponse<>(HttpStatus.BAD_REQUEST.value(), "Thao tác thất bại.", null);
+    }
+
+    public static <T> APIResponse<T> newFailureResponse(int code, String message) {
+        return new APIResponse<>(code, message, null);
+    }
+
+    public static <T> APIResponse<T> newFailureResponse(int code) {
+        return new APIResponse<>(code, "Thao tác thất bại.", null);
+    }
+
+    public static <T> APIResponse<T> newFailureResponse(int code, String message, T data) {
+        return new APIResponse<>(code, message, data);
+    }
+
     public static <T> APIResponse<List<T>> newSuccessPageResponse(Page<T> data) {
         APIResponse<List<T>> response = new APIResponse<>(HttpStatus.OK.value(), "Thao tác thành công.", data.getContent());
         Metadata metadata = new Metadata(data.getTotalElements(), data.getNumber() + 1, data.getSize());

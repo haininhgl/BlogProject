@@ -2,6 +2,7 @@ package com.bezkoder.spring.jwt.mongodb.security.jwt;
 
 import com.bezkoder.spring.jwt.mongodb.security.services.UserDetailsServiceImpl;
 import com.mongodb.lang.NonNull;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -10,12 +11,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class AuthTokenFilter extends OncePerRequestFilter {
 
@@ -28,27 +33,6 @@ public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
-    //  @Override
-//  protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
-//                                  FilterChain filterChain) throws ServletException, IOException {
-//    try {
-//      String jwt = parseJwt(request);
-//      if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-//        String username = jwtUtils.getUserNameFromJwtToken(jwt);
-//
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-//        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
-//            userDetails.getAuthorities());
-//        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-//
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//      }
-//    } catch (Exception e) {
-//      logger.error("Cannot set user authentication: {}", e);
-//    }
-//
-//    filterChain.doFilter(request, response);
-//  }
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -63,34 +47,27 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
             final String jwt = authHeader.substring(7);
-            final String username = jwtService.extractUsername(jwt);
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
-                if (jwtService.isTokenValid(jwt, userDetails)) {
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails,
-                            null,
-                            userDetails.getAuthorities()
-                    );
-                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(authToken);
-                }
+            if (SecurityContextHolder.getContext().getAuthentication() == null && jwtService.isTokenValid(jwt)) {
+                Authentication authentication = getAuthentication(jwt);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
 
         filterChain.doFilter(request, response);
     }
 
+    public Authentication getAuthentication(String token) {
+        Claims claims = jwtService.parseClaims(token);
+        Object roles = claims.get("roles");
+        List<String> rolesList = new ArrayList<>((Collection<String>) roles);
 
-//  private String parseJwt(HttpServletRequest request) {
-//    String headerAuth = request.getHeader("Authorization");
-//
-//    if (StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-//      return headerAuth.substring(7, headerAuth.length());
-//    }
-//
-//    return null;
-//  }
+        Collection<? extends GrantedAuthority> authorities = rolesList.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
+
+        User principal = new User(claims.getSubject(), "", authorities);
+
+        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
 }

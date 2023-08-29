@@ -12,7 +12,7 @@ public class Job {
 
     private static int countJobRun = 1;
 
-    @Scheduled(fixedDelay = 1000)
+    @Scheduled(fixedDelay = 100000)
     public void jobShowLog(){
         log.info("Show log run job: {}", countJobRun++);
     }

@@ -64,7 +64,7 @@ public class PostController {
     //Tạo post
     @PostMapping("/posts")
     @PreAuthorize("hasRole('USER')")
-    public APIResponse<PostDTO> createPost(@RequestBody PostRequest request) {
+    public APIResponse<PostDTO> createPost(@Valid @RequestBody PostRequest request) {
         Post post = postService.createPost(request);
         PostDTO postDTO = postMapper.toDto(post);
         return APIResponse.newSuccessResponse(postDTO);

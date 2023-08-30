@@ -13,7 +13,7 @@ public class PostFilter {
     @Size(max = STRING_MAX_LENGTH)
     private String text = "";
 
-    private Set<String> userId = new HashSet<>();
+    private Set<String> userIds = new HashSet<>();
 
     public PostFilter() {}
 
@@ -29,11 +29,11 @@ public class PostFilter {
         this.text = text;
     }
 
-    public Set<String> getUserId() {
-        return userId;
+    public Set<String> getUserIds() {
+        return userIds;
     }
 
-    public void setUserId(Set<String> userId) {
-        this.userId = userId;
+    public void setUserIds(Set<String> userIds) {
+        this.userIds = userIds;
     }
 }

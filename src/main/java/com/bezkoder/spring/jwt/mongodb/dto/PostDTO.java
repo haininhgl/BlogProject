@@ -4,6 +4,8 @@ package com.bezkoder.spring.jwt.mongodb.dto;
 import java.util.Date;
 
 public class PostDTO {
+    private String id;
+
     private String title;
 
     private String body;
@@ -23,6 +25,14 @@ public class PostDTO {
         this.createdDate = createdDate;
         this.user = user;
         this.lastModifiedDate = lastModifiedDate;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {

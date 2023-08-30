@@ -24,4 +24,9 @@ public class ExceptionTranslator {
     ResponseEntity<?> handleBadRequestException(AuthenticationException e) {
         return new ResponseEntity<>(APIResponse.newFailureResponse(HttpStatus.UNAUTHORIZED.value(), "Tài khoản không hợp lệ"), HttpStatus.OK);
     }
+
+    @ExceptionHandler(value = {ResourceNotFoundException.class})
+    ResponseEntity<?> handleBadRequestException(ResourceNotFoundException e) {
+        return new ResponseEntity<>(APIResponse.newFailureResponse(HttpStatus.NOT_FOUND.value(), "Không tìm thấy tài nguyên"), HttpStatus.OK);
+    }
 }

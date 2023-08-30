@@ -49,7 +49,7 @@ public class CommentController {
     //viet comment
     @PostMapping("/comments")
     @PreAuthorize("hasRole('USER')")
-    public APIResponse<CommentDTO> createComment(@RequestBody @Valid CommentRequest request) {
+    public APIResponse<CommentDTO> createComment(@RequestBody @Valid CommentRequest request) throws ResourceNotFoundException {
         Comment newComment = commentService.createComment(request);
         CommentDTO commentDTO = commentMapper.toDto(newComment);
         return APIResponse.newSuccessResponse(commentDTO);
@@ -58,7 +58,7 @@ public class CommentController {
     //cap nhat comment
     @PutMapping("/comments/{id}")
     @PreAuthorize("hasRole('USER')")
-    public APIResponse<String> updateById(@PathVariable String id, @RequestBody CommentRequest request) throws ForbiddenException {
+    public APIResponse<String> updateById(@PathVariable String id, @RequestBody CommentRequest request) throws ForbiddenException, ResourceNotFoundException {
         commentService.updateById(id, request);
 
         return APIResponse.newSuccessResponse();

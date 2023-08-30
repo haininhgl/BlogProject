@@ -39,7 +39,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Comment createComment(CommentRequest request) {
+    public Comment createComment(CommentRequest request) throws ResourceNotFoundException {
         Comment comment = new Comment();
         BeanUtils.copyProperties(request, comment);
 
@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public void updateById(String id, CommentRequest request) throws ForbiddenException {
+    public void updateById(String id, CommentRequest request) throws ForbiddenException, ResourceNotFoundException {
         Comment comment = getById(id);
 
         User userLogin = userService.getCurrentLoginUser();
@@ -68,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
     }
 
-    private Comment getById(String id){
+    private Comment getById(String id) throws ResourceNotFoundException {
         Comment comment = commentRepository.findById(id).orElse(null);
         if (comment == null){
             throw new ResourceNotFoundException("Comment not found!");

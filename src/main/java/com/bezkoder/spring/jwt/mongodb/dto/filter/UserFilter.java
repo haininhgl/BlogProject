@@ -16,15 +16,11 @@ public class UserFilter {
     private Set<String> roleIds = new HashSet<>();
 
 
-    @Size(max = STRING_MAX_LENGTH)
-    private boolean isActivated = false;
-
     public UserFilter() {}
 
-    public UserFilter(Set<String> roleIds,String text, boolean isActivated) {
+    public UserFilter(Set<String> roleIds,String text) {
         this.roleIds = roleIds;
         this.text = text;
-        this.isActivated = isActivated;
     }
 
     public String getText() {
@@ -41,13 +37,5 @@ public class UserFilter {
 
     public void setRoleIds(Set<String> roleIds) {
         this.roleIds = roleIds;
-    }
-
-    public boolean isActivated() {
-        return isActivated;
-    }
-
-    public void setActivated(boolean activated) {
-        isActivated = activated;
     }
 }

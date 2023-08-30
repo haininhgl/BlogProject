@@ -1,11 +1,9 @@
 package com.bezkoder.spring.jwt.mongodb.dto;
 
-import com.bezkoder.spring.jwt.mongodb.entity.Post;
-import com.bezkoder.spring.jwt.mongodb.entity.User;
-
 import java.util.Date;
 
 public class CommentDTO {
+    private String id;
 
     private String body;
 
@@ -20,6 +18,14 @@ public class CommentDTO {
         this.createdDate = createdDate;
         this.user = user;
         this.post = post;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public UserDTO getUser() {

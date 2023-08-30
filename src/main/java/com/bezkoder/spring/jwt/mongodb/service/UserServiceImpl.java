@@ -18,12 +18,15 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    private final RoleService roleService;
+
+    public UserServiceImpl(UserRepository userRepository, RoleService roleService) {
         this.userRepository = userRepository;
+        this.roleService = roleService;
     }
 
     @Override
-    public Page<User> getAllUser(UserFilter userFilter, Pageable pageable) throws ResourceNotFoundException {
+    public Page<User> getAllUser(UserFilter userFilter, Pageable pageable) {
         return userRepository.getUserList(userFilter, pageable);
     }
 
@@ -46,8 +49,7 @@ public class UserServiceImpl implements UserService {
             throw new ResourceNotFoundException("Không tìm thấy người dùng đang đăng nhập.");
         }
 
-        User user = getUserByLogin(login);
-        return user;
+        return getUserByLogin(login);
     }
 
 
@@ -63,19 +65,16 @@ public class UserServiceImpl implements UserService {
     // Cap nhat user
     @Override
     public User updateUser(User user) throws ResourceNotFoundException, ForbiddenException {
-        User currentUser = userRepository.findById(user.getId()).orElseThrow(()
-                -> new ResourceNotFoundException("User not found"));
-
         User userLogin = getCurrentLoginUser();
 
-        Set<String> newRoleIds = user.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
-        Set<String> currentRoleIds = currentUser.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
+        String adminRoleId = roleService.getRoleAdmin().getId();
+        Set<String> userRoleIds = userLogin.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
 
-        if (!user.equals(userLogin) || !newRoleIds.equals(currentRoleIds)) {
+        if (!user.equals(userLogin) && !userRoleIds.contains(adminRoleId)) {
             throw new ForbiddenException("Thao tác không hợp lệ");
         }
 
-        return userRepository.save(currentUser);
+        return userRepository.save(user);
     }
 
 

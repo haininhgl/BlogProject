@@ -29,6 +29,7 @@ public class AuthEntryPointJwt implements AuthenticationEntryPoint {
 		String json = mapper.writeValueAsString(responseBody);
 
 		PrintWriter out = response.getWriter();
+		response.setStatus(HttpStatus.OK.value());
 		response.setContentType("application/json");
 		response.setCharacterEncoding("UTF-8");
 		out.print(json);

@@ -36,6 +36,7 @@ public class CommentController {
 
     @GetMapping("/comments")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+//    public APIResponse<List<CommentDTO>> getCommentList(@RequestParam(required = true) String postId, PaginationRequest paginationRequest)
     public APIResponse<List<CommentDTO>> getCommentList(PaginationRequest paginationRequest)
             throws ResourceNotFoundException {
 

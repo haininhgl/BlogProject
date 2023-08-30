@@ -13,18 +13,13 @@ public class BasicUserRequest {
     @NotBlank(message = "Please enter username")
     private String username;
 
-    @NotBlank(message = "Please enter the full name")
-    @Size(max = STRING_MAX_LENGTH)
-    private String fullName;
-
     @NotBlank(message = "Please enter the email")
     @Size(max = STRING_MAX_LENGTH)
     @Email(message = "Invalid email format")
     private String email;
 
-    public BasicUserRequest(String username, String fullName, String email) {
+    public BasicUserRequest(String username, String email) {
         this.username = username;
-        this.fullName = fullName;
         this.email = email;
     }
 

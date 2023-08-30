@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -40,14 +42,16 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public Comment createComment(CommentRequest request) throws ResourceNotFoundException {
+        User user = userService.getCurrentLoginUser();
+        Post post = postRepository.findById(request.getPostId())
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found"));
+
         Comment comment = new Comment();
         BeanUtils.copyProperties(request, comment);
 
-        User user = userService.getCurrentLoginUser();
         comment.setUser(user);
+        comment.setCreatedDate(new Date());
 
-        Post post = postRepository.findById(request.getPostId())
-                .orElseThrow(() -> new RuntimeException("Post not found"));
         comment.setPost(post);
 
         return commentRepository.save(comment);
@@ -82,10 +86,12 @@ public class CommentServiceImpl implements CommentService {
 
         // Xác định người dùng hiện tại
         User userLogin = userService.getCurrentLoginUser();
-        Role adminRole = roleService.getRoleAdmin();
+        String adminRoleId = roleService.getRoleAdmin().getId();
+        Set<String> userRoleIds = userLogin.getRoles().stream().map(Role::getId).collect(Collectors.toSet());
+
 
         // Kiểm tra xem người dùng hiện tại có phải là người tạo ra bình luận không
-        if (!comment.getUser().equals(userLogin) && !userLogin.getRoles().contains(adminRole)){
+        if (!comment.getUser().equals(userLogin) && !userRoleIds.contains(adminRoleId)) {
             throw new ForbiddenException("Bạn không có quyền xóa bình luận này.");
         }
 

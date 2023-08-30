@@ -3,6 +3,8 @@ package com.bezkoder.spring.jwt.mongodb.entity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Objects;
+
 @Document(collection = "roles")
 public class Role {
 
@@ -43,5 +45,17 @@ public class Role {
 
   public void setSystemRole(boolean systemRole) {
     isSystemRole = systemRole;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Role role)) return false;
+    return Objects.equals(getId(), role.getId()) && getName().name().equals(role.getName().name());
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(getId(), getName().name());
   }
 }

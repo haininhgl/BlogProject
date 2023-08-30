@@ -47,6 +47,7 @@ public class UserController {
     }
 
     @GetMapping("/users")
+    @PreAuthorize("hasRole('ADMIN')")
     public APIResponse<List<UserDTO>> getUserList(@Valid UserFilter userFilter, PaginationRequest paginationRequest)
             throws ResourceNotFoundException {
 
@@ -60,7 +61,7 @@ public class UserController {
     //tao user
     @PostMapping("/users")
     @PreAuthorize("hasRole('ADMIN')")
-    public APIResponse<User> createUser(@RequestBody @Valid UserRequest request) throws BadRequestException {
+    public APIResponse<User> createUser(@Valid @RequestBody UserRequest request) throws BadRequestException {
         User user = validateCreateUser(request);
         userService.createUser(user);
         return APIResponse.newSuccessResponse();
@@ -79,12 +80,16 @@ public class UserController {
     public APIResponse<UserDTO> updateUser(@PathVariable String id, @Valid @RequestBody BasicUserRequest request)
             throws ResourceNotFoundException, ForbiddenException {
         User user = userService.getUserById(id);
+        user.setEmail(request.getEmail());
+        user.setUsername(request.getUsername());
+
         user = userService.updateUser(user);
 
         return APIResponse.newSuccessResponse(this.userMapper.toDto(user));
     }
 
     @GetMapping("users/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public APIResponse<UserDTO> getUserById(@PathVariable String id) throws ResourceNotFoundException {
         User user = userService.getUserById(id);
         return APIResponse.newSuccessResponse(this.userMapper.toDto(user));
@@ -108,8 +113,10 @@ public class UserController {
         }
 
         user.setRoles(roleList);
-
         user.setEmail(request.getEmail());
+        user.setUsername(request.getUsername());
+        user.setPassword(request.getPassword());
+
         return user;
     }
 }

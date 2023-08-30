@@ -7,9 +7,10 @@ public class CommentRequest {
     @NotBlank(message = "Bình luận gì đi?")
     private String body;
 
+    @NotBlank(message = "Bài viết nào?")
     private String postId;
 
-    public CommentRequest(){
+    public CommentRequest() {
     }
 
     public CommentRequest(String body, String postId) {

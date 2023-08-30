@@ -1,10 +1,12 @@
 package com.bezkoder.spring.jwt.mongodb.service;
 
+import com.bezkoder.spring.jwt.mongodb.entity.RoleType;
 import com.bezkoder.spring.jwt.mongodb.exception.ResourceNotFoundException;
 import com.bezkoder.spring.jwt.mongodb.entity.Role;
 import com.bezkoder.spring.jwt.mongodb.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Nullable;
 import java.util.Set;
 
 @Service
@@ -30,8 +32,9 @@ public class RoleServiceImpl implements RoleService{
         return roleRepository.findByIdIn(ids);
     }
 
+    @Nullable
     @Override
     public Role getRoleAdmin() {
-        return null;
+        return roleRepository.findByName(RoleType.ROLE_ADMIN).orElse(null);
     }
 }

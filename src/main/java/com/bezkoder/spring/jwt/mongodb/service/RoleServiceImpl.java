@@ -17,7 +17,7 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
-    public Role getRoleById(String id) {
+    public Role getRoleById(String id) throws ResourceNotFoundException {
         Role role = roleRepository.findById(id).orElse(null);
         if (role == null){
             throw new ResourceNotFoundException("Ko tim thay");

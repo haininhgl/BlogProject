@@ -51,7 +51,7 @@ public class CustomizedPostRepositoryImpl implements CustomizedPostRepository {
         List<Criteria> criteriaList = new ArrayList<>();
 
         String text = filter.getText();
-        Set<String> userIds = filter.getUserId();
+        Set<String> userIds = filter.getUserIds();
 
         if (StringUtils.isNotBlank(text)) {
             text = Pattern.quote(text);

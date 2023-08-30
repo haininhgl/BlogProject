@@ -41,9 +41,7 @@ public class PostController {
     //Xem tất cả post
     @GetMapping("/posts")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public APIResponse<List<PostDTO>> getPostList(@Valid PostFilter filter, PaginationRequest paginationRequest)
-            throws ResourceNotFoundException {
-
+    public APIResponse<List<PostDTO>> getPostList(@Valid PostFilter filter, PaginationRequest paginationRequest) {
         Pageable pageable = paginationRequest.toPageable(maxPageSize);
         Page<Post> postPage = postService.getAllPost(filter,pageable);
         Page<PostDTO> result = postPage.map(this.postMapper::toDto);
@@ -51,20 +49,18 @@ public class PostController {
         return APIResponse.newSuccessPageResponse(result);
     }
 
-    //Xem post theo tên
-    @GetMapping("/posts/search/{title}")
+    @GetMapping("/posts/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
-    public APIResponse<List<PostDTO>> getPostByTitle(@PathVariable String title) throws ResourceNotFoundException {
-        List<PostDTO> posts;
-
-        posts = postService.getPostsByTitle(title);
-        return APIResponse.newSuccessResponse(posts);
+    public APIResponse<PostDTO> getPostById(@PathVariable String id) throws ResourceNotFoundException {
+        Post post = postService.getById(id);
+        PostDTO postDTO = postMapper.toDto(post);
+        return APIResponse.newSuccessResponse(postDTO);
     }
 
     //Tạo post
     @PostMapping("/posts")
-    @PreAuthorize("hasRole('USER')")
-    public APIResponse<PostDTO> createPost(@Valid @RequestBody PostRequest request) {
+    @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
+    public APIResponse<PostDTO> createPost(@Valid @RequestBody PostRequest request) throws ResourceNotFoundException {
         Post post = postService.createPost(request);
         PostDTO postDTO = postMapper.toDto(post);
         return APIResponse.newSuccessResponse(postDTO);
@@ -72,14 +68,14 @@ public class PostController {
 
     //Cập nhật post theo id
     @PutMapping("/posts/{id}")
-    @PreAuthorize("hasRole('USER')")
-    public APIResponse<Post> updatePost(@PathVariable String id, @RequestBody PostRequest request) throws ForbiddenException {
+    @PreAuthorize("hasRole('USER')  or hasRole('ADMIN')")
+    public APIResponse<Post> updatePost(@PathVariable String id, @RequestBody PostRequest request) throws ForbiddenException, ResourceNotFoundException {
         Post post = postService.updateById(id, request);
         return APIResponse.newSuccessResponse(post);
     }
 
     //Xóa post theo id
-    @DeleteMapping("/accounts/{id}")
+    @DeleteMapping("/posts/{id}")
     @PreAuthorize("hasRole('USER') or hasRole('ADMIN')")
     public APIResponse<Post> deletePostById(@PathVariable String id) throws ResourceNotFoundException, ForbiddenException {
         postService.deleteById(id);

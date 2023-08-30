@@ -1,7 +1,6 @@
 package com.bezkoder.spring.jwt.mongodb.service;
 
 
-import com.bezkoder.spring.jwt.mongodb.dto.PostDTO;
 import com.bezkoder.spring.jwt.mongodb.dto.filter.PostFilter;
 import com.bezkoder.spring.jwt.mongodb.exception.ForbiddenException;
 import com.bezkoder.spring.jwt.mongodb.exception.ResourceNotFoundException;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class PostServiceImpl implements  PostService {
@@ -31,14 +29,17 @@ public class PostServiceImpl implements  PostService {
     }
 
     @Override
-    public Page<Post> getAllPost(PostFilter filter, Pageable pageable) throws ResourceNotFoundException {
+    public Page<Post> getAllPost(PostFilter filter, Pageable pageable) {
         return postRepository.getPostList(filter, pageable);
     }
 
     @Override
-    public Post createPost(PostRequest request) {
+    public Post createPost(PostRequest request) throws ResourceNotFoundException {
         Post post = new Post();
         BeanUtils.copyProperties(request, post);
+        Date date = new Date();
+        post.setCreatedDate(date);
+        post.setLastModifiedDate(date);
 
         User user = userService.getCurrentLoginUser();
 
@@ -47,15 +48,7 @@ public class PostServiceImpl implements  PostService {
     }
 
     @Override
-    public List<PostDTO> getPostsByTitle(String title) {
-        if (title == null) {
-            throw new ResourceNotFoundException("Post not found!");
-        }
-        return postRepository.getPostsByTitleContaining(title);
-    }
-
-    @Override
-    public Post updateById(String id, PostRequest request) throws ForbiddenException {
+    public Post updateById(String id, PostRequest request) throws ForbiddenException, ResourceNotFoundException {
         Post post = getById(id);
 
         User userLogin = userService.getCurrentLoginUser();
@@ -70,7 +63,8 @@ public class PostServiceImpl implements  PostService {
         return post;
     }
 
-    private Post getById(String id){
+    @Override
+    public Post getById(String id) throws ResourceNotFoundException {
         Post post = postRepository.findById(id).orElse(null);
         if (post == null){
             throw new ResourceNotFoundException("Post not found!");

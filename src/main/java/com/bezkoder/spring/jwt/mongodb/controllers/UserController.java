@@ -85,7 +85,7 @@ public class UserController {
     }
 
     @GetMapping("users/{id}")
-    public APIResponse<UserDTO> getUserById(@PathVariable String id){
+    public APIResponse<UserDTO> getUserById(@PathVariable String id) throws ResourceNotFoundException {
         User user = userService.getUserById(id);
         return APIResponse.newSuccessResponse(this.userMapper.toDto(user));
     }
@@ -99,7 +99,7 @@ public class UserController {
     }
 
     private User validateCreateUser(UserRequest request)
-            throws ResourceNotFoundException, BadRequestException {
+            throws BadRequestException {
         User user = new User();
 
         Set<Role> roleList = roleService.getRolesByIds(request.getRoleIds());

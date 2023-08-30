@@ -1,5 +1,6 @@
 package com.bezkoder.spring.jwt.mongodb.request;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -73,7 +74,7 @@ public class PaginationRequest {
             this.pageSize = maxPageSize;
         }
 
-        if (sortBy != null && sortDirection != null) {
+        if (StringUtils.isNotBlank(sortBy)) {
             Sort sort = Sort.by(sortBy);
             if (sortDirection.equalsIgnoreCase(DESCENDING_SORT_DIRECTION)) {
                 sort = sort.descending();

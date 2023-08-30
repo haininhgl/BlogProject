@@ -12,9 +12,4 @@ import java.util.List;
 @Repository
 public interface PostRepository extends MongoRepository<Post, String>, CustomizedPostRepository {
      Page<Post> findAll(Pageable pageable);
-
-//     Boolean existsByTitle(String title);
-
-     List<PostDTO> getPostsByTitleContaining(String title);
-
 }

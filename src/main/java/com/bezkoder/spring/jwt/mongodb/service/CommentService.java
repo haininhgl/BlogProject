@@ -14,9 +14,9 @@ public interface CommentService {
 
     Page<Comment> getAllComment(Pageable pageable) throws ResourceNotFoundException;
 
-    Comment createComment(CommentRequest request);
+    Comment createComment(CommentRequest request) throws ResourceNotFoundException;
 
-    void updateById(String id, CommentRequest request) throws ForbiddenException;
+    void updateById(String id, CommentRequest request) throws ForbiddenException, ResourceNotFoundException;
 
     void deleteById(String id) throws ResourceNotFoundException, ForbiddenException;
 }

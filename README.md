@@ -3,6 +3,7 @@
 This is a guide to the API design for a simple blog system. 
 The system consists of two types of users: User and Admin.
 
+![blog drawio](https://github.com/haininhgl/BlogProject/assets/137753273/ac24cf42-3a9b-4496-bca4-6e390c67595c)
 
 
 
